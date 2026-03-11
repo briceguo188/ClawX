@@ -20,6 +20,16 @@ on:
         description: Release title
         required: true
         type: string
+      prerelease:
+        description: Mark release as prerelease
+        required: true
+        default: false
+        type: boolean
+      make_latest:
+        description: Mark release as latest
+        required: true
+        default: true
+        type: boolean
 
 permissions:
   actions: read
@@ -51,10 +61,22 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          PRERELEASE_FLAG=""
+          LATEST_FLAG="--latest"
+
+          if [ "${{ inputs.prerelease }}" = "true" ]; then
+            PRERELEASE_FLAG="--prerelease"
+          fi
+
+          if [ "${{ inputs.make_latest }}" != "true" ]; then
+            LATEST_FLAG=""
+          fi
+
           gh release create "${{ inputs.tag_name }}" \
             release-assets/*.exe \
             release-assets/*.yml \
             --repo "${{ github.repository }}" \
             --title "${{ inputs.release_name }}" \
             --notes "Public Windows installer build published from Actions artifact run ${{ inputs.run_id }}." \
-            --prerelease
+            $PRERELEASE_FLAG \
+            $LATEST_FLAG
