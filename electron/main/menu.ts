@@ -3,6 +3,7 @@
  * Creates the native application menu for macOS/Windows/Linux
  */
 import { Menu, app, shell, BrowserWindow } from 'electron';
+import { RELEASE_ISSUES_URL } from '../shared/release-source';
 
 /**
  * Create application menu
@@ -182,7 +183,7 @@ export function createMenu(): void {
         {
           label: 'Report Issue',
           click: async () => {
-            await shell.openExternal('https://github.com/ValueCell-ai/ClawX/issues');
+            await shell.openExternal(RELEASE_ISSUES_URL);
           },
         },
         { type: 'separator' },

@@ -63,9 +63,11 @@ jobs:
         run: |
           PRERELEASE_FLAG=""
           LATEST_FLAG="--latest"
+          RELEASE_KIND="Stable release"
 
           if [ "${{ inputs.prerelease }}" = "true" ]; then
             PRERELEASE_FLAG="--prerelease"
+            RELEASE_KIND="Pre-release"
           fi
 
           if [ "${{ inputs.make_latest }}" != "true" ]; then
@@ -77,6 +79,23 @@ jobs:
             release-assets/*.yml \
             --repo "${{ github.repository }}" \
             --title "${{ inputs.release_name }}" \
-            --notes "Public Windows installer build published from Actions artifact run ${{ inputs.run_id }}." \
+            --notes "## Summary
+
+- Version: ${{ inputs.tag_name }}
+- Repository: ${{ github.repository }}
+- Source workflow run: ${{ inputs.run_id }}
+- Release type: ${RELEASE_KIND}
+
+## Assets
+
+- \`ClawX-*-win-x64.exe\`: standard Windows installer
+- \`ClawX-*-win-arm64.exe\`: Windows ARM64 installer
+- \`ClawX-*-win.exe\`: combined installer artifact
+- \`*.yml\`: electron-updater metadata consumed by this repository's releases
+
+## Installation Notes
+
+- Windows SmartScreen may warn on first launch. Click \"More info\" -> \"Run anyway\" if needed.
+- Auto-update is configured to read releases from this repository." \
             $PRERELEASE_FLAG \
             $LATEST_FLAG

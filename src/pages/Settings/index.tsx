@@ -37,6 +37,7 @@ import {
   type UiTelemetryEntry,
 } from '@/lib/telemetry';
 import { useTranslation } from 'react-i18next';
+import { RELEASE_REPOSITORY_URL } from '@/lib/release-links';
 import { SUPPORTED_LANGUAGES } from '@/i18n';
 import { hostApiFetch } from '@/lib/host-api';
 import { cn } from '@/lib/utils';
@@ -896,7 +897,7 @@ export function Settings() {
                 <Button
                   variant="link"
                   className="h-auto p-0 text-[14px] text-blue-500 hover:text-blue-600 font-medium"
-                  onClick={() => window.electron.openExternal('https://github.com/ValueCell-ai/ClawX')}
+                  onClick={() => window.electron.openExternal(RELEASE_REPOSITORY_URL)}
                 >
                   {t('about.github')}
                 </Button>
