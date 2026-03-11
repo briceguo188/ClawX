@@ -86,6 +86,12 @@ jobs:
 - Source workflow run: ${{ inputs.run_id }}
 - Release type: ${RELEASE_KIND}
 
+## Fork Notice
+
+This repository is a community-maintained fork of [ValueCell-ai/ClawX](https://github.com/ValueCell-ai/ClawX).
+Releases published here are maintained by `${{ github.repository_owner }}` and are not official upstream releases.
+The upstream MIT license and copyright notice are retained.
+
 ## Assets
 
 - \`ClawX-*-win-x64.exe\`: standard Windows installer

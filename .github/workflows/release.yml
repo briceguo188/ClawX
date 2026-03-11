@@ -168,6 +168,12 @@ jobs:
             ## 🚀 ClawX ${{ github.ref_name }}
             
             ClawX - Graphical AI Assistant based on OpenClaw
+
+            ## Fork Notice
+
+            This repository is a community-maintained fork of [ValueCell-ai/ClawX](https://github.com/ValueCell-ai/ClawX).
+            Releases published here are maintained by `${{ github.repository_owner }}` and are not official upstream releases.
+            The upstream MIT license and copyright notice are retained.
             
             ### 📦 Downloads
             

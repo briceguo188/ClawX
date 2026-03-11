@@ -25,7 +25,7 @@
   <a href="https://discord.com/invite/84Kex3GGAh" target="_blank">
   <img src="https://img.shields.io/discord/1399603591471435907?logo=discord&labelColor=%20%235462eb&logoColor=%20%23f5f5f5&color=%20%235462eb" alt="chat on Discord" />
   </a>
-  <img src="https://img.shields.io/github/downloads/ValueCell-ai/ClawX/total?color=%23027DEB" alt="Downloads" />
+  <img src="https://img.shields.io/github/downloads/briceguo188/ClawX/total?color=%23027DEB" alt="Downloads" />
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License" />
 </p>
 
@@ -34,6 +34,11 @@
 </p>
 
 ---
+
+> Fork 说明：
+> 本仓库是 [ValueCell-ai/ClawX](https://github.com/ValueCell-ai/ClawX) 的社区维护分叉版本，继续沿用上游 MIT License。
+> 本仓库发布的安装包由 `briceguo188` 维护，属于 fork 发行版，不代表上游官方发布。
+> 详情见 [FORK_NOTICE.md](FORK_NOTICE.md)。
 
 ## 概述
 

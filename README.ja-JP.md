@@ -25,7 +25,7 @@
   <a href="https://discord.com/invite/84Kex3GGAh" target="_blank">
   <img src="https://img.shields.io/discord/1399603591471435907?logo=discord&labelColor=%20%235462eb&logoColor=%20%23f5f5f5&color=%20%235462eb" alt="chat on Discord" />
   </a>
-  <img src="https://img.shields.io/github/downloads/ValueCell-ai/ClawX/total?color=%23027DEB" alt="Downloads" />
+  <img src="https://img.shields.io/github/downloads/briceguo188/ClawX/total?color=%23027DEB" alt="Downloads" />
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License" />
 </p>
 
@@ -34,6 +34,11 @@
 </p>
 
 ---
+
+> Fork notice:
+> このリポジトリは [ValueCell-ai/ClawX](https://github.com/ValueCell-ai/ClawX) のコミュニティ管理フォークであり、上流の MIT License に基づいて配布されています。
+> ここで公開されるビルドは `briceguo188` が管理する fork リリースであり、上流公式リリースではありません。
+> 詳細は [FORK_NOTICE.md](FORK_NOTICE.md) を参照してください。
 
 ## 概要
 
