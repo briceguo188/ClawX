@@ -77,7 +77,10 @@
     },
     "protocols": {
       "openai": "OpenAI Compatible",
-      "anthropic": "Anthropic Compatible"
+      "anthropic": "Anthropic Compatible",
+      "openaiChat": "OpenAI Chat Completions",
+      "openaiResponses": "OpenAI Responses",
+      "anthropicMessages": "Anthropic Messages"
     },
     "toast": {
       "added": "Provider added successfully",

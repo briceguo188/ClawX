@@ -30,9 +30,11 @@ import {
   type ProviderVendorInfo,
 } from '@/stores/providers';
 import {
+  CUSTOM_PROVIDER_PROTOCOL_OPTIONS,
   PROVIDER_TYPE_INFO,
   type ProviderType,
   getProviderIconUrl,
+  getProviderProtocolOption,
   resolveProviderApiKeyForSave,
   resolveProviderModelForSave,
   shouldShowProviderModelId,
@@ -271,7 +273,7 @@ interface ProviderCardProps {
   onSaveEdits: (payload: { newApiKey?: string; updates?: Partial<ProviderConfig> }) => Promise<void>;
   onValidateKey: (
     key: string,
-    options?: { baseUrl?: string; apiProtocol?: string }
+    options?: { baseUrl?: string; apiProtocol?: ProviderAccount['apiProtocol'] }
   ) => Promise<{ valid: boolean; error?: string }>;
   devModeUnlocked: boolean;
 }
@@ -309,6 +311,7 @@ function ProviderCard({
   const [saving, setSaving] = useState(false);
 
   const typeInfo = PROVIDER_TYPE_INFO.find((t) => t.id === account.vendorId);
+  const protocolOption = getProviderProtocolOption(apiProtocol);
   const showModelIdField = shouldShowProviderModelId(typeInfo, devModeUnlocked);
   const canEditModelConfig = Boolean(typeInfo?.showBaseUrl || showModelIdField);
 
@@ -443,6 +446,12 @@ function ProviderCard({
             </div>
             <div className="flex items-center gap-2 mt-0.5 text-[13px] text-muted-foreground">
               <span className="capitalize">{vendor?.name || account.vendorId}</span>
+              {account.vendorId === 'custom' && (
+                <>
+                  <span className="w-1 h-1 rounded-full bg-black/20 dark:bg-white/20" />
+                  <span>{t(protocolOption.labelKey, protocolOption.fallbackLabel)}</span>
+                </>
+              )}
               <span className="w-1 h-1 rounded-full bg-black/20 dark:bg-white/20" />
               <span>{getAuthModeLabel(account.authMode, t)}</span>
               {account.model && (
@@ -537,7 +546,7 @@ function ProviderCard({
                   <Input
                     value={baseUrl}
                     onChange={(e) => setBaseUrl(e.target.value)}
-                    placeholder={apiProtocol === 'anthropic-messages' ? "https://api.example.com/anthropic" : "https://api.example.com/v1"}
+                    placeholder={getProviderProtocolOption(apiProtocol).baseUrlPlaceholder}
                     className={currentInputClasses}
                   />
                 </div>
@@ -557,20 +566,16 @@ function ProviderCard({
                 <div className="space-y-1.5 pt-2">
                   <Label className={currentLabelClasses}>{t('aiProviders.dialog.protocol', 'Protocol')}</Label>
                   <div className="flex gap-2 text-[13px]">
-                    <button
-                      type="button"
-                      onClick={() => setApiProtocol('openai-completions')}
-                      className={cn("flex-1 py-1.5 px-3 rounded-lg border transition-colors", apiProtocol === 'openai-completions' ? "bg-white dark:bg-card border-black/20 dark:border-white/20 shadow-sm font-medium" : "border-transparent bg-black/5 dark:bg-white/5 text-muted-foreground hover:bg-black/10 dark:hover:bg-white/10")}
-                    >
-                      {t('aiProviders.protocols.openai', 'OpenAI')}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setApiProtocol('anthropic-messages')}
-                      className={cn("flex-1 py-1.5 px-3 rounded-lg border transition-colors", apiProtocol === 'anthropic-messages' ? "bg-white dark:bg-card border-black/20 dark:border-white/20 shadow-sm font-medium" : "border-transparent bg-black/5 dark:bg-white/5 text-muted-foreground hover:bg-black/10 dark:hover:bg-white/10")}
-                    >
-                      {t('aiProviders.protocols.anthropic', 'Anthropic')}
-                    </button>
+                    {CUSTOM_PROVIDER_PROTOCOL_OPTIONS.map((option) => (
+                      <button
+                        key={option.id}
+                        type="button"
+                        onClick={() => setApiProtocol(option.id)}
+                        className={cn("flex-1 py-1.5 px-3 rounded-lg border transition-colors", apiProtocol === option.id ? "bg-white dark:bg-card border-black/20 dark:border-white/20 shadow-sm font-medium" : "border-transparent bg-black/5 dark:bg-white/5 text-muted-foreground hover:bg-black/10 dark:hover:bg-white/10")}
+                      >
+                        {t(option.labelKey, option.fallbackLabel)}
+                      </button>
+                    ))}
                   </div>
                 </div>
               )}
@@ -740,7 +745,7 @@ interface AddProviderDialogProps {
   onValidateKey: (
     type: string,
     apiKey: string,
-    options?: { baseUrl?: string; apiProtocol?: string }
+    options?: { baseUrl?: string; apiProtocol?: ProviderAccount['apiProtocol'] }
   ) => Promise<{ valid: boolean; error?: string }>;
   devModeUnlocked: boolean;
 }
@@ -783,6 +788,7 @@ function AddProviderDialog({
   const [authMode, setAuthMode] = useState<'oauth' | 'apikey'>('apikey');
 
   const typeInfo = PROVIDER_TYPE_INFO.find((t) => t.id === selectedType);
+  const protocolOption = getProviderProtocolOption(apiProtocol);
   const showModelIdField = shouldShowProviderModelId(typeInfo, devModeUnlocked);
   const isOAuth = typeInfo?.isOAuth ?? false;
   const supportsApiKey = typeInfo?.supportsApiKey ?? false;
@@ -1182,7 +1188,7 @@ function AddProviderDialog({
                     <Label htmlFor="baseUrl" className={labelClasses}>{t('aiProviders.dialog.baseUrl')}</Label>
                     <Input
                       id="baseUrl"
-                      placeholder={apiProtocol === 'anthropic-messages' ? "https://api.example.com/anthropic" : "https://api.example.com/v1"}
+                      placeholder={protocolOption.baseUrlPlaceholder}
                       value={baseUrl}
                       onChange={(e) => setBaseUrl(e.target.value)}
                       className={inputClasses}
@@ -1209,20 +1215,16 @@ function AddProviderDialog({
                   <div className="space-y-2.5">
                     <Label className={labelClasses}>{t('aiProviders.dialog.protocol', 'Protocol')}</Label>
                     <div className="flex gap-2 text-[13px]">
-                      <button
-                        type="button"
-                        onClick={() => setApiProtocol('openai-completions')}
-                        className={cn("flex-1 py-1.5 px-3 rounded-lg border transition-colors", apiProtocol === 'openai-completions' ? "bg-white dark:bg-card border-black/20 dark:border-white/20 shadow-sm font-medium" : "border-transparent bg-black/5 dark:bg-white/5 text-muted-foreground hover:bg-black/10 dark:hover:bg-white/10")}
-                      >
-                        {t('aiProviders.protocols.openai', 'OpenAI')}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setApiProtocol('anthropic-messages')}
-                        className={cn("flex-1 py-1.5 px-3 rounded-lg border transition-colors", apiProtocol === 'anthropic-messages' ? "bg-white dark:bg-card border-black/20 dark:border-white/20 shadow-sm font-medium" : "border-transparent bg-black/5 dark:bg-white/5 text-muted-foreground hover:bg-black/10 dark:hover:bg-white/10")}
-                      >
-                        {t('aiProviders.protocols.anthropic', 'Anthropic')}
-                      </button>
+                      {CUSTOM_PROVIDER_PROTOCOL_OPTIONS.map((option) => (
+                        <button
+                          key={option.id}
+                          type="button"
+                          onClick={() => setApiProtocol(option.id)}
+                          className={cn("flex-1 py-1.5 px-3 rounded-lg border transition-colors", apiProtocol === option.id ? "bg-white dark:bg-card border-black/20 dark:border-white/20 shadow-sm font-medium" : "border-transparent bg-black/5 dark:bg-white/5 text-muted-foreground hover:bg-black/10 dark:hover:bg-white/10")}
+                        >
+                          {t(option.labelKey, option.fallbackLabel)}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 )}

@@ -75,6 +75,13 @@ export interface ProviderTypeInfo {
   apiKeyUrl?: string;
 }
 
+export interface ProviderProtocolOption {
+  id: NonNullable<ProviderConfig['apiProtocol']>;
+  labelKey: string;
+  fallbackLabel: string;
+  baseUrlPlaceholder: string;
+}
+
 export type ProviderAuthMode =
   | 'api_key'
   | 'oauth_device'
@@ -156,6 +163,27 @@ export const PROVIDER_TYPE_INFO: ProviderTypeInfo[] = [
   { id: 'custom', name: 'Custom', icon: '⚙️', placeholder: 'API key...', requiresApiKey: true, showBaseUrl: true, showModelId: true, modelIdPlaceholder: 'your-provider/model-id' },
 ];
 
+export const CUSTOM_PROVIDER_PROTOCOL_OPTIONS: ProviderProtocolOption[] = [
+  {
+    id: 'openai-completions',
+    labelKey: 'aiProviders.protocols.openaiChat',
+    fallbackLabel: 'OpenAI Chat Completions',
+    baseUrlPlaceholder: 'https://api.example.com/v1',
+  },
+  {
+    id: 'openai-responses',
+    labelKey: 'aiProviders.protocols.openaiResponses',
+    fallbackLabel: 'OpenAI Responses',
+    baseUrlPlaceholder: 'https://api.example.com/v1',
+  },
+  {
+    id: 'anthropic-messages',
+    labelKey: 'aiProviders.protocols.anthropicMessages',
+    fallbackLabel: 'Anthropic Messages',
+    baseUrlPlaceholder: 'https://api.example.com/anthropic',
+  },
+];
+
 /** Get the SVG logo URL for a provider type, falls back to undefined */
 export function getProviderIconUrl(type: ProviderType | string): string | undefined {
   return providerIcons[type];
@@ -181,6 +209,15 @@ export function shouldShowProviderModelId(
   if (!provider?.showModelId) return false;
   if (provider.showModelIdInDevModeOnly && !devModeUnlocked) return false;
   return true;
+}
+
+export function getProviderProtocolOption(
+  protocol: ProviderConfig['apiProtocol'] | ProviderAccount['apiProtocol'] | undefined,
+): ProviderProtocolOption {
+  return (
+    CUSTOM_PROVIDER_PROTOCOL_OPTIONS.find((option) => option.id === protocol)
+    ?? CUSTOM_PROVIDER_PROTOCOL_OPTIONS[0]
+  );
 }
 
 export function resolveProviderModelForSave(

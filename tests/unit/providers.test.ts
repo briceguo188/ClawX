@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
+  CUSTOM_PROVIDER_PROTOCOL_OPTIONS,
   PROVIDER_TYPES,
   PROVIDER_TYPE_INFO,
+  getProviderProtocolOption,
   resolveProviderApiKeyForSave,
   resolveProviderModelForSave,
   shouldShowProviderModelId,
@@ -115,5 +117,25 @@ describe('provider metadata', () => {
     expect(resolveProviderApiKeyForSave('ollama', 'real-key')).toBe('real-key');
     expect(resolveProviderApiKeyForSave('openai', '')).toBeUndefined();
     expect(resolveProviderApiKeyForSave('openai', ' sk-test ')).toBe('sk-test');
+  });
+
+  it('exposes all custom provider protocol options, including OpenAI responses', () => {
+    expect(CUSTOM_PROVIDER_PROTOCOL_OPTIONS.map((option) => option.id)).toEqual([
+      'openai-completions',
+      'openai-responses',
+      'anthropic-messages',
+    ]);
+
+    expect(getProviderProtocolOption('openai-responses')).toMatchObject({
+      id: 'openai-responses',
+      labelKey: 'aiProviders.protocols.openaiResponses',
+      baseUrlPlaceholder: 'https://api.example.com/v1',
+    });
+
+    expect(getProviderProtocolOption('anthropic-messages')).toMatchObject({
+      id: 'anthropic-messages',
+      labelKey: 'aiProviders.protocols.anthropicMessages',
+      baseUrlPlaceholder: 'https://api.example.com/anthropic',
+    });
   });
 });

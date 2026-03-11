@@ -50,6 +50,7 @@
       "replaceApiKeyHelp": "現在保存されている API キーをそのまま使う場合は、この欄を空のままにしてください。",
       "baseUrl": "ベース URL",
       "modelId": "モデル ID",
+      "protocol": "プロトコル",
       "fallbackModels": "フォールバックモデル",
       "fallbackProviders": "別プロバイダーへのフォールバック",
       "fallbackModelIds": "同一プロバイダーのフォールバックモデル ID",
@@ -73,6 +74,13 @@
       "setDefault": "デフォルトに設定",
       "editKey": "API キーを編集",
       "delete": "プロバイダーを削除"
+    },
+    "protocols": {
+      "openai": "OpenAI 互換",
+      "anthropic": "Anthropic 互換",
+      "openaiChat": "OpenAI Chat Completions",
+      "openaiResponses": "OpenAI Responses",
+      "anthropicMessages": "Anthropic Messages"
     },
     "toast": {
       "added": "プロバイダーが正常に追加されました",

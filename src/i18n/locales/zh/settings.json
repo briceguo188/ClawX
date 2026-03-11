@@ -77,7 +77,10 @@
     },
     "protocols": {
       "openai": "OpenAI 兼容",
-      "anthropic": "Anthropic 兼容"
+      "anthropic": "Anthropic 兼容",
+      "openaiChat": "OpenAI Chat Completions",
+      "openaiResponses": "OpenAI Responses",
+      "anthropicMessages": "Anthropic Messages"
     },
     "toast": {
       "added": "提供商添加成功",
