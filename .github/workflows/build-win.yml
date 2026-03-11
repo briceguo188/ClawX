@@ -1,0 +1,47 @@
+name: Build Windows Package
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-win:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Work around missing ms runtime dependency
+        run: pnpm add ms@2.1.3
+
+      - name: Download uv binaries for Windows
+        run: pnpm run uv:download:win
+
+      - name: Build Windows package
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpm run build:vite && pnpm exec zx scripts/bundle-openclaw.mjs && pnpm exec zx scripts/bundle-openclaw-plugins.mjs && pnpm exec electron-builder --win --publish never
+
+      - name: Upload Windows artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: clawx-win
+          path: |
+            release/*.exe
+            release/*.yml
+            !release/builder-debug.yml
+          retention-days: 7
